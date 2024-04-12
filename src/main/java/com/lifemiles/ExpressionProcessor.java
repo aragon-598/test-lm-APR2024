@@ -13,10 +13,14 @@ public class ExpressionProcessor {
     }
 
     public String processExpression(String infixExpression) {
-        String postfixExpression = converter.convertExpression(infixExpression);
+        try {
+            String postfixExpression = converter.convertExpression(infixExpression);
         double result = evaluator.evaluateExpression(postfixExpression);
         return "INFIX_EXPRESSION: " + infixExpression + "\n" +
                "POSTFIX_EXPRESSION: " + postfixExpression + "\n" +
                "VALUE: " + result + "\n";
+        } catch (Exception e) {
+            return " MENSAJE: " + e.getMessage();
+        }
     }
 }
