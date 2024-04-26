@@ -1,23 +1,26 @@
 package com.lifemiles.util;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class UtilFunctions implements IUtilFunctions {
+
+    private static Map<Character, Integer> operators = new HashMap<>();
+
+    static {
+        operators.put('+', 1);
+        operators.put('-', 1);
+        operators.put('*', 2);
+        operators.put('/', 2);
+    }
 
     @Override
     public boolean esOperador(char c) {
-        return c == '+' || c == '-' || c == '*' || c == '/';
+        return operators.containsKey(c);
     }
     
     @Override
     public int obtenerPrecedencia(char operador) {
-        switch (operador) {
-            case '+':
-            case '-':
-                return 1;
-            case '*':
-            case '/':
-                return 2;
-            default:
-                return -1;
-        }
+        return operators.getOrDefault(operador, -1);
     }
 }
