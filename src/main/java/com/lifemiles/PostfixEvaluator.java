@@ -28,8 +28,9 @@ public class PostfixEvaluator implements ExpressionEvaluator {
                         pila.push(operand1 * operand2);
                         break;
                     case '/':
+                        if (operand2 <1)
+                            throw new IllegalArgumentException("La expresión no es válida");
                         pila.push(operand1 / operand2);
-                        break;
                 }
             }
         }

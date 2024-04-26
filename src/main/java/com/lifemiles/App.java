@@ -11,7 +11,7 @@ public class App {
         ExpressionEvaluator evaluator = new PostfixEvaluator();
         ExpressionProcessor processor = new ExpressionProcessor(converter, evaluator);
         
-        String infixExpression = "1+2.5/3*4";
+        String infixExpression = "1 + 2.5 / -9 * 4";
         System.out.println(processor.processExpression(infixExpression));
     }
 

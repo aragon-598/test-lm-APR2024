@@ -19,35 +19,46 @@ public class PostfixConverter implements ExpressionConverter{
     @Override
     public String convertExpression(String infixExpression) {
         Stack<Character> pila = new Stack<>();
-        Queue<Character> colaSalida = new LinkedList<>();
+        Queue<String> colaSalida = new LinkedList<>(); // Usamos una cola de cadenas en lugar de una cola de caracteres
+        
+        StringBuilder numeroActual = new StringBuilder(); // Para construir los números con decimales
         
         for (int i = 0; i < infixExpression.length(); i++) {
             char caracter = infixExpression.charAt(i);
             
-            if (Character.isDigit(caracter)) {
-                colaSalida.add(caracter);
-            } else if (caracter == '(') {
-                throw new IllegalArgumentException("La expresión "+infixExpression+" no es valida");
-            } else if (caracter == ')') {
-                while (!pila.isEmpty() && pila.peek() != '(') {
-                    throw new IllegalArgumentException("La expresión "+infixExpression+" no es valida");
+            if (Character.isDigit(caracter) || caracter == '.') {
+                numeroActual.append(caracter);
+            } else {
+                if (numeroActual.length() > 0) {
+                    colaSalida.add(numeroActual.toString());
+                    numeroActual.setLength(0); // Reinicia el StringBuilder
                 }
-            } else if (utilFunctions.esOperador(caracter)) {
-                while (!pila.isEmpty() && utilFunctions.obtenerPrecedencia(caracter) <= utilFunctions.obtenerPrecedencia(pila.peek())) {
-                    colaSalida.add(pila.pop());
+                
+                if (caracter == '(') {
+                    throw new IllegalArgumentException("Se ha producido algún error al procesar la expresión"); //("Se ha producido algún error al procesar la expresión");
+                } else if (caracter == ')') {
+                    return "Se ha producido algún error al procesar la expresión";
+                } else if (utilFunctions.esOperador(caracter)) {
+                    while (!pila.isEmpty() && utilFunctions.obtenerPrecedencia(caracter) <= utilFunctions.obtenerPrecedencia(pila.peek())) {
+                        colaSalida.add(pila.pop().toString());
+                    }
+                    pila.push(caracter);
                 }
-                pila.push(caracter);
             }
+        }
+        
+        if (numeroActual.length() > 0) {
+            colaSalida.add(numeroActual.toString());
         }
         
         // vaciando la pila
         while (!pila.isEmpty()) {
-            colaSalida.add(pila.pop());
+            colaSalida.add(pila.pop().toString());
         }
         
         // construyendo la cadena resultante
         StringBuilder resultado = new StringBuilder();
-        for (char c : colaSalida) {
+        for (String c : colaSalida) {
             resultado.append(c);
             resultado.append(' '); // poner un espacio entre cada char
         }
