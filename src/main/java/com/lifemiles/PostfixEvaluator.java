@@ -29,7 +29,7 @@ public class PostfixEvaluator implements ExpressionEvaluator {
                         break;
                     case '/':
                         if (operand2 <1)
-                            throw new IllegalArgumentException("La expresión no es válida");
+                            throw new IllegalArgumentException("La expresión infija no es válida");
                         pila.push(operand1 / operand2);
                 }
             }

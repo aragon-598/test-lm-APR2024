@@ -18,6 +18,12 @@ public class PostfixConverter implements ExpressionConverter{
 
     @Override
     public String convertExpression(String infixExpression) {
+
+        boolean validExpression = utilFunctions.validarExpresionInfija(infixExpression);
+
+        if (!validExpression)
+            throw new IllegalArgumentException("Se ha producido algún error al procesar la expresión");
+
         Stack<Character> pila = new Stack<>();
         Queue<String> colaSalida = new LinkedList<>(); // Usamos una cola de cadenas en lugar de una cola de caracteres
         
@@ -26,6 +32,9 @@ public class PostfixConverter implements ExpressionConverter{
         for (int i = 0; i < infixExpression.length(); i++) {
             char caracter = infixExpression.charAt(i);
             
+            if (caracter=='-') {
+                
+            }
             if (Character.isDigit(caracter) || caracter == '.') {
                 numeroActual.append(caracter);
             } else {
@@ -34,11 +43,7 @@ public class PostfixConverter implements ExpressionConverter{
                     numeroActual.setLength(0); // Reinicia el StringBuilder
                 }
                 
-                if (caracter == '(') {
-                    throw new IllegalArgumentException("Se ha producido algún error al procesar la expresión"); //("Se ha producido algún error al procesar la expresión");
-                } else if (caracter == ')') {
-                    return "Se ha producido algún error al procesar la expresión";
-                } else if (utilFunctions.esOperador(caracter)) {
+                else if (utilFunctions.esOperador(caracter)) {
                     while (!pila.isEmpty() && utilFunctions.obtenerPrecedencia(caracter) <= utilFunctions.obtenerPrecedencia(pila.peek())) {
                         colaSalida.add(pila.pop().toString());
                     }
